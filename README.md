@@ -104,8 +104,8 @@ The displayed prediction probabilities reflect the model’s relative preference
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/samirag2010/ITAI-1378-GOATVision-PlayClassifier.git
-cd ITAI-1378-GOATVision-PlayClassifier
+git clone https://github.com/samirag2010/GOATVision.git
+cd GOATVision
 ```
 
 ### 2. Create a virtual environment
