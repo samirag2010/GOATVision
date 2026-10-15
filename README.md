@@ -1,209 +1,183 @@
-G.O.A.T Vision LIVE DEMO 
-https://goatvision-soccer.streamlit.app
+# G.O.A.T Vision — Soccer Play Classifier
 
-## 📸 Demo
+G.O.A.T Vision (Game Outcome Action Tracker) is a computer vision application that classifies soccer images into five play categories using ResNet50 transfer learning and a Streamlit interface.
 
-### Interface
-![Interface](results/DEMO_GV_Interface.png)
+**Developed by:** [Samira Gevara](https://github.com/samirag2010)  
+**Status:** Working prototype
 
-### Prediction
-![Prediction](results/DEMO_GV_Prediction.png)
+[Live Demo](https://goatvision-soccer.streamlit.app/) | [Demo Video](https://youtu.be/KCoNR_yaisQ) | [Project Presentation](docs/presentation.pdf)
 
-ITAI-1378 Midterm – G.O.A.T Vision: Game Outcome Action Tracker
-Project Name
+## Project Overview
 
-G.O.A.T Vision (Game Outcome Action Tracker) is a computer vision application that classifies soccer plays from images using a deep learning model (ResNet50). Users can upload an image and receive a prediction along with confidence scores.
+This project explores how computer vision can distinguish soccer plays from still images. Users upload an image and receive a predicted category with a breakdown of the model’s class probabilities.
 
-Course: ITAI 1378 – Computer Vision
-Student: Samira Gevara
+The project demonstrates dataset preparation, transfer learning, model evaluation, and application development.
 
-Project Tier
+## Features
 
-Tier 2 – Custom Dataset + Transfer Learning
+- Upload JPG, JPEG, or PNG images.
+- Classify images into five categories:
+  - Corner Kick
+  - Free Kick
+  - Penalty Kick
+  - Shot
+  - Yellow Card
+- Display the predicted category and class probabilities.
+- Upload MP4 or MOV files through an experimental video feature.
 
-This project builds a custom image classification system using transfer learning with a pretrained deep learning model. 
+**Video limitation:** The current implementation extracts and classifies the first readable frame. It does not analyze an entire video or track plays over time.
 
-Problem Statement
+## Screenshots
 
-Analyzing soccer events from visual footage is often a manual and time-consuming process for analysts, coaches, and content creators. Automatically identifying key moments such as free kicks, penalty kicks, corner kicks, shots, and yellow cards can significantly improve the efficiency of highlight creation and match analysis.
+### Application Interface
+![GOATVision interface](results/DEMO_GV_Interface.png)
 
-This project explores how computer vision can classify soccer event images into specific play types.
+### Example Prediction
+![GOATVision prediction](results/DEMO_GV_Prediction.png)
 
-Solution Overview
+## My Contributions
 
-G.O.A.T Vision is a computer vision model that classifies soccer event images into five categories:
+- Curated and cleaned a custom dataset of soccer images.
+- Developed and experimented with a PyTorch transfer-learning workflow using ResNet50.
+- Applied image preprocessing and training augmentation.
+- Evaluated validation performance and examined confusion between similar play categories.
+- Built the Streamlit interface and connected it to the saved model.
+- Documented project findings, demonstrations, and limitations.
 
-Corner Kick
+AI tools supported project planning, debugging, implementation guidance, and documentation. Dataset preparation, code execution, and model experimentation were performed by Samira Gevara.
 
-Free Kick
+See the [AI Usage Log](docs/AI_usage_log.md) for additional details.
 
-Penalty Kick
+## Technologies
 
-Shot on Goal
+| Area | Tools |
+|---|---|
+| Programming | Python |
+| Model development | PyTorch, torchvision, ResNet50 |
+| Evaluation | scikit-learn, matplotlib |
+| Interface | Streamlit |
+| Development environment | Google Colab |
+| Model download | Google Drive and gdown |
+| Video frame extraction | OpenCV |
+| Version control | Git and GitHub |
 
-Yellow Card
+## How It Works
 
-Displays prediction confidence
+1. The user uploads a soccer image.
+2. The application converts the image to RGB.
+3. The image is resized to 224 × 224 pixels and normalized.
+4. The saved ResNet50 classifier processes the image.
+5. The application displays the predicted class and probability breakdown.
 
-Visual probability breakdown
+The training workflow uses transfer learning from ImageNet-pretrained ResNet50 features. At application startup, the app constructs the model architecture and loads the saved project weights.
 
-The system uses transfer learning with a pretrained ResNet50 model implemented in PyTorch. Images are preprocessed and passed through the neural network to produce a predicted soccer event class.
+Training augmentation includes horizontal flips and color jitter. These random transformations are not applied to uploaded images during inference.
 
-Technical Approach
+## Dataset
 
-Technique: Image Classification
+The project documentation records **146 curated images** across five categories:
 
-Model: ResNet50 (pretrained on ImageNet)
+| Dataset Label | Category |
+|---|---|
+| corner_kick | Corner Kick |
+| free_kick | Free Kick |
+| penalty_kick | Penalty Kick |
+| shot | Shot |
+| yellow_card | Yellow Card |
 
-Frameworks and Tools:
+Images were manually reviewed to remove irrelevant or ambiguous examples.
 
-PyTorch
+See the [dataset notes](data/README.md) and [project notebooks](notebooks/) for available supporting material.
 
-torchvision
+## Evaluation
 
-scikit-learn
+**Reported validation accuracy: 82.14%.**
 
-Google Drive (model hosting via gdown)
+This result reflects the project’s small validation dataset. It should not be interpreted as expected accuracy across all soccer images or real-world matches.
 
-Streamlit
+Evaluation identified confusion between visually similar categories, including shots, penalty kicks, and corner kicks.
 
-matplotlib
+The displayed prediction probabilities reflect the model’s relative preference among its five categories. They are not a calibrated guarantee that a prediction is correct.
 
-Google Colab (GPU)
+## Run Locally
 
-Transfer learning allows the model to leverage features learned from millions of images while adapting to a smaller soccer-specific dataset.
+### 1. Clone the repository
 
-Dataset Plan
+```bash
+git clone https://github.com/samirag2010/ITAI-1378-GOATVision-PlayClassifier.git
+cd ITAI-1378-GOATVision-PlayClassifier
+```
 
-Dataset Size: 146 curated images
+### 2. Create a virtual environment
 
-Classes:
+```bash
+python -m venv .venv
+```
 
-corner_kick
+Activate it using the command for your system:
 
-free_kick
+**Windows PowerShell**
+```powershell
+.venv\Scripts\Activate.ps1
+```
 
-penalty_kick
+**macOS / Linux**
+```bash
+source .venv/bin/activate
+```
 
-shot
+### 3. Install dependencies
 
-yellow_card
+```bash
+python -m pip install -r requirements.txt
+```
 
-Images were collected from publicly available soccer imagery sources and manually cleaned to remove irrelevant or ambiguous images such as cartoons, logos, or unclear events.
+### 4. Start the application
 
-Deployment Notes
+```bash
+python -m streamlit run app.py
+```
 
-Due to GitHub file size limits, the trained model is hosted externally on Google Drive.
-The app automatically downloads the model at runtime using gdown.
+### Model Download
 
-Data Augmentation Used:
+On first launch, the application downloads `goatvision_model_state_dict.pth` from its configured Google Drive location if the file is missing.
 
-Horizontal flip
+Internet access and access to the hosted model are required. Later launches reuse the local file.
 
-Color jitter
+The application supports CPU execution and selects CUDA when available.
 
-Image resizing
+Dependencies are not fully pinned, so compatibility may vary across environments.
 
-Image normalization
+## Repository Guide
 
-These augmentations help improve generalization despite the small dataset.
+| Path | Purpose |
+|---|---|
+| [app.py](app.py) | Streamlit interface and model inference |
+| [requirements.txt](requirements.txt) | Python dependencies |
+| [notebooks/](notebooks/) | Exploration and model development |
+| [data/README.md](data/README.md) | Dataset notes |
+| [results/](results/) | Demonstration screenshots |
+| [docs/presentation.pdf](docs/presentation.pdf) | Project presentation |
+| [docs/AI_usage_log.md](docs/AI_usage_log.md) | AI assistance documentation |
+| [LICENSE](LICENSE) | Repository license |
 
-Model Evaluation
+## Limitations
 
-Primary Metric: Validation Accuracy
+- The small dataset limits generalization.
+- A still image may not contain enough context to distinguish similar plays.
+- The classifier selects among five known categories and does not reliably reject unrelated images.
+- Experimental video support classifies one frame rather than a complete sequence.
+- Model availability depends on external hosting.
+- The application is a prototype, not a production match-analysis system
 
-Target Accuracy: ≥ 70%
-Achieved Accuracy: 82.14%
+## Future Improvements
 
-Secondary Evaluation:
-
-Confusion Matrix analysis
-
-Prediction visualization on validation images
-
-Key observations from evaluation:
-
-Yellow card detection achieved perfect classification in validation samples.
-
-Some confusion occurred between shots, penalty kicks, and corner kicks due to similar goal-area visual contexts.
-
-System Pipeline
-Input Soccer Image
-        ↓
-Image Preprocessing
-(resize, normalization, augmentation)
-        ↓
-ResNet50 Feature Extraction
-(transfer learning)
-        ↓
-Fully Connected Classifier
-        ↓
-Predicted Event Label
-(Corner Kick | Free Kick | Penalty Kick | Shot | Yellow Card)
-
-Week-by-Week Plan
-Week	Task	Milestone
-Week 11	Dataset collection and cleaning	Dataset prepared
-Week 12	Model setup and preprocessing	Training pipeline ready
-Week 13	Train model and test predictions	Model learning
-Week 14	Evaluate results and confusion matrix	Performance analysis
-Week 15	Prepare slides and documentation	Presentation ready
-Week 16	Present project	Final submission (May 8th)
-
-Resources Needed
-Resource	Details
-Compute	Google Colab GPU
-Frameworks	PyTorch, torchvision
-Libraries	sklearn, matplotlib
-Estimated Cost	$0
-
-Risks and Mitigation
-Risk	Probability	Mitigation
-Small dataset size	Medium	Data augmentation and transfer learning
-Ambiguous images	Medium	Manual dataset cleaning
-Class confusion	Low	Model fine-tuning and confusion matrix analysis
-
-AI Usage Log
-
-AI tools such as ChatGPT were used to assist with:
-
-project planning
-
-code debugging
-
-PyTorch implementation guidance
-
-documentation drafting
-
-All code execution, dataset preparation, and model experimentation were performed by the student (Samira Gevara)
-
-Repository Structure
-project-name/
-README.md
-requirements.txt
-notebooks/
-    01_exploration.ipynb
-data/
-    README.md
-docs/
-    proposal.pdf
-
-Future Improvements
-
-Potential improvements for future development include:
-
-expanding the dataset to thousands of labeled soccer event images
-
-training with video frame sequences instead of single images
-
-implementing object detection to localize players and referees
-
-building a real-time match event detection system
-
-## 🎥 Demo Video
-
-[![Watch Demo](docs/demo.png)](https://youtu.be/KCoNR_yaisQ)
-
+- Expand the dataset with more diverse labeled images.
+- Document reproducible training settings and dataset splits.
+- Evaluate performance on a separate test set.
+- Add per-class evaluation results and investigate unrelated-image handling.
+- Improve model-download error handling and video resource cleanup.
+- Explore video sequences and object detection.
 
 
 
